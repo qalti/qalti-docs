@@ -1,0 +1,39 @@
+{
+  "name": "Qalti Docs",
+  "logo": {
+    "light": "/imgs/logo-brand.svg",
+    "dark": "/imgs/logo-brand.svg",
+    "text": "Documentation"
+  },
+  "favicon": "/favicon.ico",
+  "theme": "mint",
+  "colors": {
+    "primary": "#f44e27",
+    "light": "#f44e27",
+    "dark": "#f44e27"
+  },
+  "interaction": {
+    "drilldown": false
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "index",
+          "/getting-started/install",
+          "/getting-started/first-test",
+          "/getting-started/best-practices",
+          "/getting-started/ci-quickstart"
+        ]
+      },
+      {
+        "group": "Changelog",
+        "pages": [
+          "/changelog"
+        ]
+      }
+    ]
+  }
+}
+

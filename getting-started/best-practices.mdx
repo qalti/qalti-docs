@@ -1,0 +1,143 @@
+---
+title: Writing Tests - Best Practices
+sidebarTitle: Best Practices
+---
+
+You can write Qalti tests in many different ways, using more general instructions, and they will work. However, based on our experience and feedback from our clients, we've identified practices that make tests more reliable and consistent.
+
+Think of it this way: these guidelines are similar to what you'd follow when outsourcing manual testing. You need clear, detailed documentation for each test case—written for someone who may be seeing your app for the first time. The same principle applies here. Below we break down the specific details to help you write effective Qalti tests.
+
+## Test File Format
+
+A Qalti test is a plain text file with a `.test` extension containing one step per line. We use `//` at the beginning of a line for comments that provide context rather than actionable instructions.
+
+## Start with Context
+
+Begin each test with comment lines explaining what you're testing:
+
+```text
+// SyncUps is a meeting management app that helps teams organize daily sync-up meetings.
+// This test verifies that a past meeting appears in the history list.
+```
+
+We recommend using `//` to mark lines as comments. Use comments to provide additional contextual information that helps Qalti Agent understand the app's purpose, test objective, or any other background information. While the Agent reads all lines, comments are typically used for context and guidance rather than actionable test steps.
+
+## Write Clear Actions
+
+Combine the action and expected outcome in a single line:
+
+```text
+Tap the "Design" sync-up card. The Design sync-up detail screen opens showing "SYNC-UP INFO" section.
+```
+
+**Good examples:**
+- `Open the SyncUps app. When app loads you will see "Daily Sync-ups" screen with a list of sync-ups.`
+- `Tap "Start Meeting" button. The meeting timer screen appears with "Time Elapsed" and "Time Remaining" displayed.`
+- `Tap "Save and end". You return to the Design sync-up detail screen.`
+
+**Avoid vague instructions:**
+- ❌ `Go to the main screen`
+- ✅ `Tap "Daily Sync-ups". The main screen appears with a list of sync-ups.`
+
+## Be Specific
+
+Always use exact element names in quotes and specify what should happen:
+
+- Quote exact text: `"Start Meeting"`, `"Design"`, `"Save and end"`
+- Specify locations when needed: `"End meeting" button at the top left`
+- Describe visible elements: `"Time Elapsed" and "Time Remaining" displayed`
+
+## Assume First-Time Use
+
+Write as if Qalti is seeing your app for the first time:
+
+- Don't use internal team jargon or abbreviations
+- Explain what each screen shows
+- State expected outcomes explicitly
+- Describe the full context of actions
+
+**Example:**
+```text
+Tap the "End meeting" button at the top left. A dialog appears with the question "End meeting?" and three options: "Save and end", "Discard", and "Resume".
+```
+
+## Handle Edge Cases
+
+Account for optional dialogs or permissions:
+
+```text
+If a speech recognition permission dialog appears, dismiss it by not allowing.
+```
+
+## Use Verification Steps
+
+Add explicit verification lines for critical checks:
+
+```text
+Verify that a new meeting entry with today's date and current time appears in the "PAST MEETINGS" section.
+```
+
+Verification steps should:
+- State what to check clearly
+- Include specific element names or values
+- Focus on test objectives
+
+## Complete Test Example
+
+```text
+// SyncUps is a meeting management app that helps teams organize daily sync-up meetings.
+// This test verifies that a past meeting appears in the history list.
+
+Open the SyncUps app. When app loads you will see "Daily Sync-ups" screen with a list of sync-ups.
+Tap the "Design" sync-up card. The Design sync-up detail screen opens showing "SYNC-UP INFO" section.
+Tap the "Start Meeting" button. The meeting timer screen appears with "Time Elapsed" and "Time Remaining" displayed.
+If a speech recognition permission dialog appears, dismiss it by not allowing.
+Tap the "End meeting" button at the top left. A dialog appears with the question "End meeting?" and three options: "Save and end", "Discard", and "Resume".
+Tap "Save and end". You return to the Design sync-up detail screen. Wait for the screen to update with the new meeting entry.
+Verify that a new meeting entry with today's date and current time appears in the "PAST MEETINGS" section.
+Swipe the newly created meeting row fully to the left starting from the right edge (near the ">" arrow). The meeting is removed from the "PAST MEETINGS" list.
+```
+
+## Using Comments
+
+You can add comments anywhere in your test file using `//` at the beginning of a line:
+
+```text
+// This is a comment providing context about the app or test
+Open the app. The home screen appears.
+
+// The next step handles an optional permission dialog
+If a notification permission dialog appears, tap "Allow".
+
+// Now we verify the main functionality
+Verify that the dashboard shows today's date.
+```
+
+Comments are useful for:
+- Explaining the app's domain or purpose at the start of the test
+- Describing why a particular test step is important
+- Noting edge cases or conditional behavior
+- Adding context that helps the Agent make better decisions
+- Documenting assumptions or prerequisites
+
+**Tip:** While the Agent reads all lines including comments, we recommend using them primarily for context and background information. This keeps your actionable test steps clear and easy to follow.
+
+## Common Action Patterns
+
+- **Opening apps**: `Open the [App Name] app. The [screen name] appears.`
+- **Tapping elements**: `Tap "[Element]". The [expected screen/state] appears.`
+- **Input text**: `Input "[text]". [Expected result] appears.`
+- **Scrolling**: `Move finger on the middle of the screen down. New content appears below.`
+- **Waiting**: `Wait for the screen to update with the new meeting entry.`
+- **Verifying**: `Verify that "[element]" [condition].`
+
+## Key Principles
+
+1. **Specificity over brevity** — Better to be clear than concise
+2. **Explicit outcomes** — Always state what should happen
+3. **No assumptions** — Don't assume Qalti knows your app
+4. **One step, one line** — Keep each action on its own line
+5. **Test like a human** — Write instructions as you'd explain to a new team member
+
+Following these practices will make your tests more reliable and reproducible.
+

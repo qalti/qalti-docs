@@ -1,0 +1,75 @@
+---
+title: Your First Test
+sidebarTitle: First Test
+---
+
+The easiest way to run your first test is on an iOS Simulator with an app build compiled for the simulator. Don't worry—**your app build never leaves your computer**. We don't have access to it. All we receive are screenshots and the test flow itself, similar to test management systems like [qase.io](https://qase.io) or [qameta.io](https://qameta.io).
+
+## Prerequisites
+
+Before running your first test, ensure you have:
+
+- [Qalti installed](/getting-started/install) on your Mac
+- Your app bundle available as `.app` built for simulator
+
+If you don't have your own app build available yet, you can [download our demo app (SyncUps)](https://app.qalti.com/SyncUps/SyncUps-simulator.zip). However, we recommend trying Qalti with your own app to see how it works with your specific use case.
+
+## Running Your First Test in Qalti UI
+
+<video
+  controls
+  src="/imgs/how_to_run_your_first_test.mp4"
+  width="100%"
+/>
+
+Follow these steps to run your first test:
+
+1. **Launch Qalti** — Open Qalti from your Applications folder
+2. **Sign In** — If you're not already signed in, log in with your Qalti account. We provide 2 bonus credits to help you get started with running tests
+3. **Connect to Simulator** — Connect to an iOS Simulator from within Qalti. Wait a few minutes while the initialization process completes
+4. **Install Your App** — Drag and drop your app build (`.app`) into Qalti to install it on the simulator
+5. **Write Your Test** — Write your test in plain English. Here's an example test for the SyncUps app:
+
+<Accordion title="View the test" defaultOpen={false}>
+
+```text
+// SyncUps is a meeting management app that helps teams organize daily sync-up meetings.
+// This test verifies that a past meeting appears in the history list.
+
+Open the SyncUps app. When app loads you will see "Daily Sync-ups" screen with a list of sync-ups.
+Tap the "Design" sync-up card. The Design sync-up detail screen opens showing "SYNC-UP INFO" section.
+Tap the "Start Meeting" button. The meeting timer screen appears with "Time Elapsed" and "Time Remaining" displayed.
+If a speech recognition permission dialog appears, dismiss it by not allowing.
+Tap the "End meeting" button at the top left. A dialog appears with the question "End meeting?" and three options: "Save and end", "Discard", and "Resume".
+Tap "Save and end". You return to the Design sync-up detail screen. Wait for the screen to update with the new meeting entry.
+Verify that a new meeting entry with today's date and current time appears in the "PAST MEETINGS" section.
+Swipe the newly created meeting row fully to the left starting from the right edge (near the ">" arrow). The meeting is removed from the "PAST MEETINGS" list.
+```
+
+**Note:** Lines starting with `//` are typically used for comments. We recommend using them to provide context that helps Qalti Agent understand your app and test objectives, while keeping actionable steps clearly separated.
+
+</Accordion>
+
+6. **Choose AI Model** — Qalti allows you to select different LLM models for running tests. We recommend using the **default recommended model** for the best results
+7. **Run Your Test** — Click the **Run** button to execute your test. Qalti will interact with your app and provide a detailed report
+
+## Writing Test Steps
+
+Write clear, specific actions as if the system is seeing your app for the first time. Avoid internal team jargon or assumptions about app-specific behavior. Always specify exact button names, element labels, and the expected outcome of each action. 
+
+The more specific your instructions, the more reliable and reproducible your tests will be. Without clear guidance, Qalti Agent will make decisions on its own—just like a human tester would—which may lead to unpredictable results.
+
+For a comprehensive guide on writing effective tests, see our [Best Practices](/getting-started/best-practices) page.
+
+## Running Tests via CLI
+
+Qalti also supports running tests from the command line:
+
+```bash
+/Applications/Qalti.app/Contents/MacOS/Qalti \
+  cli /absolute/path/to/qalti_tests/your_test.test \
+  --app-path /absolute/path/to/YourApp-simulator.zip \
+  --device-name "iPhone 16"
+```
+
+For more details on CLI usage and CI/CD integration, see the [CI Quickstart](/getting-started/ci-quickstart) guide.

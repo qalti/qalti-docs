@@ -1,0 +1,122 @@
+---
+title: CI Quickstart
+sidebarTitle: CI Quickstart
+---
+
+This guide shows how to run the Qalti CLI in a CI pipeline (GitHub Actions). It includes parallel simulator runs and an example of running a test on a real iOS device.
+
+You can check out the full demo repository here: [github.com/qalti/qalti](https://github.com/qalti/qalti)
+
+Below is how a real CI run looks like under the hood with 4 workers:
+
+![Qalti demo](https://raw.githubusercontent.com/qalti/qalti/main/imgs/demo.gif)
+
+## What you can do
+
+- Parallel simulator execution
+- Run tests on a real device
+- Produce Allure-formatted reports that you can upload to any QA system
+
+## Install Qalti in CI
+
+Qalti is a macOS app, and the CLI is included in the bundle. You can download and install it in your CI pipeline with this bash script:
+
+```bash
+curl -L -o Qalti.dmg https://app.qalti.com/releases/Qalti.dmg
+hdiutil attach Qalti.dmg -nobrowse -quiet -mountpoint /Volumes/Qalti
+cp -R /Volumes/Qalti/Qalti.app /Applications/Qalti.app
+hdiutil detach /Volumes/Qalti -quiet
+
+# Run the CLI directly from the app bundle
+/Applications/Qalti.app/Contents/MacOS/Qalti cli --help
+/Applications/Qalti.app/Contents/Resources/QaltiScheduler --help
+```
+
+## Minimal CLI example
+
+This is the easiest way to run your test:
+
+```bash
+/Applications/Qalti.app/Contents/MacOS/Qalti change_appearance.test
+```
+
+where `change_appearance.test` is a test file with steps in English:
+
+```text
+Open Settings
+Scroll down to find Display & Brightness
+Tap it
+Change Appearance
+Verify Appearance is changed
+```
+
+To learn more, run `/Applications/Qalti.app/Contents/MacOS/Qalti cli --help`
+
+<Accordion title="View CLI help output" defaultOpen={false}>
+
+```text
+Qalti CLI - Run iOS tests from command line
+
+USAGE:
+    qalti cli <test-file> --token SOME_TOKEN [options]
+
+ARGUMENTS:
+    <test-file>              Path to test file (.test, .txt, or .json)
+
+OPTIONS:
+    --token, -t <token>      Access token (or set QALTI_TOKEN env var). Optional if a saved session exists
+    --model <model>           AI model to use (default: gpt-4.1)
+                            Available: gpt-5, gpt-5-mini, gpt-5-nano, gpt-4.1,
+                            gemini-2.5-pro, claude-4-sonnet, claude-3.5-sonnet
+    --prompts-dir <dir>       Custom prompts directory
+    --report-path <file>      Output report path (default: ./reports/test_TIMESTAMP.json)
+    --allure-dir <dir>        Generate Allure report files in specified directory
+    
+DEVICE SELECTION:
+    --udid <udid>             Device UDID (takes precedence)
+    --device-name <name>      Device name (e.g., "iPhone 16")
+    --os <version>            OS version (e.g., "iOS 18.2")
+    --type <type>             Device type: simulator (default) or real
+    
+OTHER OPTIONS:
+    --app-path <path>         App bundle to install before testing (.app or .ipa)
+    --iterations <n>          Max test iterations (default: 50)
+    --verbose, -v             Enable verbose output
+    --help, -h                Show this help
+
+EXAMPLES:
+    # Basic usage
+    qalti cli ./tests/login.test --token abc123
+    
+    # Specific device and model
+    qalti cli ./tests/login.test --token abc123 --device-name "iPhone 16" --model claude-4-sonnet
+    
+    # Using UDID with app install
+    qalti cli ./tests/app.test --udid 12345-67890 --app-path ./MyApp.app --verbose
+    
+    # Custom prompts and report location
+    qalti cli ./tests/checkout.test --prompts-dir ./custom-prompts --report-path ./reports/checkout-run.json
+```
+
+</Accordion>
+
+## CI example (GitHub Actions)
+
+This workflow example shows how you can use Qalti in your CI pipelines: [`.github/workflows/qalti.yml`](https://github.com/qalti/qalti/blob/main/.github/workflows/qalti.yml) — it's short, commented, and shows how to:
+
+- Set up Qalti
+- Run tests on simulators and on a real device
+- Export Allure results and upload artifacts
+
+You can check the [Qalti CI run](https://github.com/qalti/qalti/actions/runs/18176495891/job/51743490923) to see it in action.
+
+## Allure reports
+
+Qalti outputs results in Allure format if you set the `--allure-dir` flag. You can upload them to your QA system of choice. As an example, we use TestOps Cloud and upload via `allurectl`.
+
+![Allure report in TestOps Cloud](https://raw.githubusercontent.com/qalti/qalti/main/imgs/qalti-allure-report-in-testsops.png)
+
+## Contact
+
+- If you need access to the CLI, let us know: [hi@qalti.com](mailto:hi@qalti.com)
+- Qalti website: [qalti.com](https://qalti.com/)

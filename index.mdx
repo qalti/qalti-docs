@@ -1,0 +1,100 @@
+---
+title: Qalti — Overview
+sidebarTitle: Overview
+---
+
+Qalti is an AI agent for mobile app testing. 
+It visually inspects your app and interacts with it the way a user would: 
+tapping buttons, entering text, scrolling, opening URLs, etc. 
+You provide a test in plain English; Qalti executes it and reports.
+
+
+Qalti is a macOS Application with an included CLI. This lets you run tests against local iOS Simulators and connected iPhone/iPad devices with minimal latency. The same binaries run in your environment on macOS (e.g., GitHub Actions on macOS runners or self‑hosted Macs) for CI.
+
+# How does it work
+
+Qalti Agent behaves like a manual QA engineer: it sees the on‑screen UI like a human and decides what to do next like a human.
+
+Under the hood, Qalti reads the test instructions you provided and runs a tight perception–action loop on your app’s real UI:
+
+- **View** — capture and understand the current screen.
+- **Decide** — pick the next best action toward the goal.
+- **Act** — execute the tap, type, scroll, or open URL.
+- **Verify** — compare the screen with the expected state.
+- **Repeat** — iterate until the test flow is done.
+
+Then it produces a run report with a step‑by‑step log and screenshots.
+
+
+# Qalti Design principles 
+
+- **App is the black box** — No source code or UI hierarchy required; Qalti interacts only with the rendered UI. This is why it works for native apps and custom‑rendered UIs (incl. game engines, cross‑platform toolkits).
+- **You're in control** — You define the exact flow, inputs, and assertions. The Agent executes deterministically and won't take alternate paths unless explicitly allowed.
+- **Common sense, surfaced** — Benign variations are handled (dismiss transient pop‑ups, tolerate minor label changes) to keep runs stable, and every adaptation is highlighted in the report; if semantics would change, the test fails.
+
+# Examples
+
+
+## RUN App. Training numbers consistency
+
+RUN is a training app that tracks your running workouts. 
+Its Home‑screen widget shows a snapshot of the latest run with some numbers. 
+The same metrics are visible inside the RUN app and in Apple’s Fitness app (Sessions). 
+In this example we verify that all three views stay consistent.
+
+Below is a Qalti test and how the Agent executes it. 
+**The goal**: verify that the RUN widget shows the same numbers as both the RUN app and Apple’s Fitness app.
+
+<Accordion title="View the test" defaultOpen={false}>
+
+```text
+Find the RUN widget on the Home screen
+Note the numbers displayed to compare in two other places:
+– Distance above the Distance label (km from the last run)
+– Total Time (top left)
+– Heart Rate (top right)
+– Pace (bottom left)
+– Calories burned (bottom right)
+Tap the widget (area with numbers) to open the RUN app
+Scroll down to see the Training
+Verify that Distance, Total Time, Heart Rate, Pace, and Calories match the widget
+Open the Fitness app
+Tap on Sessions
+Verify again that Distance, Total Time, Heart Rate, Pace, and Calories match the widget
+If all 5 numbers match in both apps, mark the test as passed
+```
+
+</Accordion>
+
+<video controls src="./imgs/intro-example.mp4" width="100%" preload="metadata" />
+
+While running, the Agent highlights the step it is executing.
+On the “Scroll down to see the Training” step, it detects that the target content is already visible and skips scrolling.
+The Agent compares the numbers across views and notices a 1 BPM difference, so the test is marked as failed. You can pause the video at any moment to read the Agent’s on‑screen reasoning and see why a particular action or comparison was chosen.
+
+This is the **final state** reported by Qalti Agent: In the Fitness app session details, all workout statistics are visible. Every value matches the widget except Heart Rate, which differs by 1 BPM, resulting in a failed run under strict validation criteria.
+
+If a 1 BPM difference is acceptable in your case, add that tolerance to the test, and the Agent will treat the run as passed.
+
+It is easy to run on your app. [Install Qalti](/getting-started/install), then check out our [step-by-step guide with video](/getting-started/first-test) to write and run your first test on the iOS Simulator or a connected device.
+
+
+# Platform Support
+
+Because it operates at the screen level, apps built with virtually any UI framework are supported. Runs on iOS and iPadOS, on Simulator and real devices. Android will be added soon.
+
+| Platform | Framework | Simulator | Real device |
+| --- | --- | :---: | :---: |
+| iPhone / iPad (iOS) | UIKit | ✅ | ✅ |
+| iPhone / iPad (iOS) | SwiftUI | ✅ | ✅ |
+| iPhone / iPad (iOS) | React Native | ✅ | ✅ |
+| iPhone / iPad (iOS) | Flutter | ✅ | ✅ |
+| iPhone / iPad (iOS) | Unity | ✅ | ✅ |
+| iPhone / iPad (iOS) | Unreal Engine | ✅ | ✅ |
+| iPhone / iPad (iOS) | WebViews (WKWebView, SFSafariViewController) | ✅ | ✅ |
+| iPhone / iPad (iOS) | Mobile Browser (Safari, Chrome, etc.) | ✅ | ✅ |
+| iPhone / iPad (iOS) | .NET MAUI | ✅ | ✅ |
+| iPhone / iPad (iOS) | Xamarin.iOS | ✅ | ✅ |
+| iPhone / iPad (iOS) | Capacitor / Cordova | ✅ | ✅ |
+| iPhone / iPad (iOS) | KMM (Kotlin Multiplatform Mobile) | ✅ | ✅ |
+| Android | — | WIP | WIP |

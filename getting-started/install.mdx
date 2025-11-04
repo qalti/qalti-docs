@@ -1,0 +1,53 @@
+---
+title: Install Qalti
+sidebarTitle: Install Qalti
+---
+
+## System Requirements
+
+Qalti is currently available for **macOS only**. We support **Apple Silicon (M-series)** processors. While Qalti may work on Intel-based Macs, performance and compatibility are not guaranteed.
+
+To run tests, you need to have **Xcode** and **iOS Simulators** installed on your system. If Xcode or simulators are not found, Qalti will prompt you to install them.
+
+## Installation
+
+You can install Qalti in several ways:
+
+### Option 1: Install via Script
+
+Run this bash script to download and install Qalti automatically:
+
+```bash
+curl -L -o Qalti.dmg https://app.qalti.com/releases/Qalti.dmg
+hdiutil attach Qalti.dmg -nobrowse -quiet -mountpoint /Volumes/Qalti
+cp -R /Volumes/Qalti/Qalti.app /Applications/Qalti.app
+hdiutil detach /Volumes/Qalti -quiet
+```
+
+### Option 2: Download Manually
+
+Download Qalti directly from [qalti.com](https://qalti.com) or using this [direct link](https://app.qalti.com/releases/Qalti.dmg).
+
+## Running Qalti
+
+After installation, you can run Qalti in the following ways:
+
+### UI App 
+
+Find and Open Qalti from Applications, or run it from the terminal:
+
+```bash
+/Applications/Qalti.app/Contents/MacOS/Qalti
+```
+
+### CLI
+
+You can run the CLI directly from the app bundle:
+
+```bash
+/Applications/Qalti.app/Contents/MacOS/Qalti cli --help
+/Applications/Qalti.app/Contents/Resources/QaltiScheduler --help
+```
+
+To run tests via CLI, you will need an access token. To obtain a token, please contact us at [hi@qalti.com](mailto:hi@qalti.com).
+
