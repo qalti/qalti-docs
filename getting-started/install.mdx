@@ -49,5 +49,20 @@ You can run the CLI directly from the app bundle:
 /Applications/Qalti.app/Contents/Resources/QaltiScheduler --help
 ```
 
-To run tests via CLI, you will need an access token. To obtain a token, please contact us at [hi@qalti.com](mailto:hi@qalti.com).
+To run tests via UI, CLI, or CI, you need your own OpenRouter API key.
+
+Get a key at [openrouter.ai/keys](https://openrouter.ai/keys), then:
+
+- Add it in Qalti Settings for UI runs
+- Or set it for terminal/CI runs:
+
+```bash
+export OPENROUTER_API_KEY="sk-or-v1-..."
+```
+
+You can also pass it explicitly in CLI commands:
+
+```bash
+/Applications/Qalti.app/Contents/MacOS/Qalti cli ./tests/example.test --token "$OPENROUTER_API_KEY"
+```
 

@@ -11,6 +11,7 @@ Before running your first test, ensure you have:
 
 - [Qalti installed](/getting-started/install) on your Mac
 - Your app bundle available as `.app` built for simulator
+- Your OpenRouter API key (from [openrouter.ai/keys](https://openrouter.ai/keys))
 
 If you don't have your own app build available yet, you can [download our demo app (SyncUps)](https://app.qalti.com/SyncUps/SyncUps-simulator.zip). However, we recommend trying Qalti with your own app to see how it works with your specific use case.
 
@@ -25,7 +26,7 @@ If you don't have your own app build available yet, you can [download our demo a
 Follow these steps to run your first test:
 
 1. **Launch Qalti** — Open Qalti from your Applications folder
-2. **Sign In** — If you're not already signed in, log in with your Qalti account. We provide 2 bonus credits to help you get started with running tests
+2. **Add API Key** — Open Settings in Qalti and add your OpenRouter API key
 3. **Connect to Simulator** — Connect to an iOS Simulator from within Qalti. Wait a few minutes while the initialization process completes
 4. **Install Your App** — Drag and drop your app build (`.app`) into Qalti to install it on the simulator
 5. **Write Your Test** — Write your test in plain English. Here's an example test for the SyncUps app:
@@ -66,8 +67,11 @@ For a comprehensive guide on writing effective tests, see our [Best Practices](/
 Qalti also supports running tests from the command line:
 
 ```bash
+export OPENROUTER_API_KEY="sk-or-v1-..."
+
 /Applications/Qalti.app/Contents/MacOS/Qalti \
   cli /absolute/path/to/qalti_tests/your_test.test \
+  --token "$OPENROUTER_API_KEY" \
   --app-path /absolute/path/to/YourApp-simulator.zip \
   --device-name "iPhone 16"
 ```

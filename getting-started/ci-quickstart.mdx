@@ -17,6 +17,18 @@ Below is how a real CI run looks like under the hood with 4 workers:
 - Run tests on a real device
 - Produce Allure-formatted reports that you can upload to any QA system
 
+## Authentication for CI
+
+Qalti requires your OpenRouter API key for test execution.
+
+Set it in your CI environment:
+
+```bash
+export OPENROUTER_API_KEY="sk-or-v1-..."
+```
+
+Or pass it explicitly with `--token`.
+
 ## Install Qalti in CI
 
 Qalti is a macOS app, and the CLI is included in the bundle. You can download and install it in your CI pipeline with this bash script:
@@ -37,7 +49,8 @@ hdiutil detach /Volumes/Qalti -quiet
 This is the easiest way to run your test:
 
 ```bash
-/Applications/Qalti.app/Contents/MacOS/Qalti change_appearance.test
+export OPENROUTER_API_KEY="sk-or-v1-..."
+/Applications/Qalti.app/Contents/MacOS/Qalti cli change_appearance.test --token "$OPENROUTER_API_KEY"
 ```
 
 where `change_appearance.test` is a test file with steps in English:
@@ -58,13 +71,13 @@ To learn more, run `/Applications/Qalti.app/Contents/MacOS/Qalti cli --help`
 Qalti CLI - Run iOS tests from command line
 
 USAGE:
-    qalti cli <test-file> --token SOME_TOKEN [options]
+    qalti cli <test-file> --token OPENROUTER_API_KEY [options]
 
 ARGUMENTS:
     <test-file>              Path to test file (.test, .txt, or .json)
 
 OPTIONS:
-    --token, -t <token>      Access token (or set QALTI_TOKEN env var). Optional if a saved session exists
+    --token, -t <token>      OpenRouter API key (or set OPENROUTER_API_KEY env var)
     --model <model>           AI model to use (default: gpt-4.1)
                             Available: gpt-5, gpt-5-mini, gpt-5-nano, gpt-4.1,
                             gemini-2.5-pro, claude-4-sonnet, claude-3.5-sonnet
@@ -86,10 +99,10 @@ OTHER OPTIONS:
 
 EXAMPLES:
     # Basic usage
-    qalti cli ./tests/login.test --token abc123
+    qalti cli ./tests/login.test --token sk-or-v1-xxx
     
     # Specific device and model
-    qalti cli ./tests/login.test --token abc123 --device-name "iPhone 16" --model claude-4-sonnet
+    qalti cli ./tests/login.test --token sk-or-v1-xxx --device-name "iPhone 16" --model claude-4-sonnet
     
     # Using UDID with app install
     qalti cli ./tests/app.test --udid 12345-67890 --app-path ./MyApp.app --verbose
@@ -100,6 +113,22 @@ EXAMPLES:
 
 </Accordion>
 
+## Parallel simulator runs (QaltiScheduler)
+
+Use `QaltiScheduler` to execute tests in parallel:
+
+```bash
+/Applications/Qalti.app/Contents/Resources/QaltiScheduler \
+  --tests "./tests" \
+  --device-name "iPhone 16" \
+  --os "18.3" \
+  --workers 4 \
+  --model "gpt-4.1" \
+  --token "$OPENROUTER_API_KEY" \
+  --app-path "./SyncUps-simulator.zip" \
+  --allure-dir "./reports/allure"
+```
+
 ## CI example (GitHub Actions)
 
 This workflow example shows how you can use Qalti in your CI pipelines: [`.github/workflows/qalti.yml`](https://github.com/qalti/qalti/blob/main/.github/workflows/qalti.yml) — it's short, commented, and shows how to:
@@ -108,7 +137,7 @@ This workflow example shows how you can use Qalti in your CI pipelines: [`.githu
 - Run tests on simulators and on a real device
 - Export Allure results and upload artifacts
 
-You can check the [Qalti CI run](https://github.com/qalti/qalti/actions/runs/18176495891/job/51743490923) to see it in action.
+You can check recent runs in the [Qalti Actions dashboard](https://github.com/qalti/qalti/actions) to see it in action.
 
 ## Allure reports
 
@@ -118,5 +147,5 @@ Qalti outputs results in Allure format if you set the `--allure-dir` flag. You c
 
 ## Contact
 
-- If you need access to the CLI, let us know: [hi@qalti.com](mailto:hi@qalti.com)
+- Questions and support: [hi@qalti.com](mailto:hi@qalti.com)
 - Qalti website: [qalti.com](https://qalti.com/)
