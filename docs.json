@@ -1,5 +1,9 @@
 {
   "name": "Qalti Docs",
+  "banner": {
+    "content": "Qalti is now open-source under MIT license! Full source code on [GitHub](https://github.com/qalti/qalti).",
+    "dismissible": true
+  },
   "logo": {
     "light": "/imgs/logo-brand.svg",
     "dark": "/imgs/logo-brand.svg",

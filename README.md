@@ -2,7 +2,7 @@
   <a href="https://qalti.com/"><img src="./imgs/logo-brand.svg" alt="Qalti logo" width="120" /></a>
   <h1>Qalti Documentation</h1>
   <p>
-    This repository contains the public documentation for Qalti, powered by Mintlify.
+    Qalti is now open-source under MIT license. This repository contains the public documentation, powered by Mintlify.
   </p>
 </div>
 
